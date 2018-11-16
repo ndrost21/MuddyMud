@@ -23,7 +23,7 @@ namespace MuddyMud
             Location location = new Location(1, "Home", "This is your house.");
 
             _player = new Player(0, 0, 1, 10, 10);
-            MoveTo(World.LocationByID(World.LOCATION_ID_HOME));
+            MoveTo(World.LocationByID(World.LOCATION_ID_HOME), "home");
             _player.Inventory.Add(new InventoryItem(World.ItemByID(World.ITEM_ID_RUSTY_SWORD), 1));
 
             lblHitPoints.Text = _player.CurrentHitPoints.ToString();
@@ -37,27 +37,29 @@ namespace MuddyMud
 
         }
 
+
+
         private void btnWest_Click(object sender, EventArgs e)
         {
-            MoveTo(_player.CurrentLocation.LocationToWest);
+            MoveTo(_player.CurrentLocation.LocationToWest, "west");
         }
 
         private void btnNorth_Click(object sender, EventArgs e)
         {
-            MoveTo(_player.CurrentLocation.LocationToNorth);
+            MoveTo(_player.CurrentLocation.LocationToNorth, "north");
         }
 
         private void btnEast_Click(object sender, EventArgs e)
         {
-            MoveTo(_player.CurrentLocation.LocationToEast);
+            MoveTo(_player.CurrentLocation.LocationToEast, "east");
         }
 
         private void btnSouth_Click(object sender, EventArgs e)
         {
-            MoveTo(_player.CurrentLocation.LocationToSouth);
+            MoveTo(_player.CurrentLocation.LocationToSouth, "south");
         }
 
-        private void MoveTo(Location newLocation)
+        private void MoveTo(Location newLocation, string direction)
         {
             //Does the location have any required items
             if (newLocation.ItemRequiredToEnter != null)
@@ -71,7 +73,9 @@ namespace MuddyMud
             }
 
             // Update the player's current location
+            rtbMessages.Text += $"You are moving {direction}" + Environment.NewLine;
             _player.CurrentLocation = newLocation;
+
 
             // Show/hide available movement buttons
             btnNorth.Visible = (newLocation.LocationToNorth != null);
@@ -109,7 +113,7 @@ namespace MuddyMud
 
                             // Remove quest items from inventory
                             _player.RemoveQuestCompletionItems(newLocation.QuestAvailableHere);
-            
+
                             // Give quest rewards
                             rtbMessages.Text += "You receive: " + Environment.NewLine;
                             rtbMessages.Text += newLocation.QuestAvailableHere.RewardExperiencePoints.ToString() + " experience points" + Environment.NewLine;
@@ -186,22 +190,7 @@ namespace MuddyMud
             }
 
             // Refresh player's inventory list
-            dgvInventory.RowHeadersVisible = false;
-
-            dgvInventory.ColumnCount = 2;
-            dgvInventory.Columns[0].Name = "Name";
-            dgvInventory.Columns[0].Width = 197;
-            dgvInventory.Columns[1].Name = "Quantity";
-
-            dgvInventory.Rows.Clear();
-
-            foreach (InventoryItem inventoryItem in _player.Inventory)
-            {
-                if (inventoryItem.Quantity > 0)
-                {
-                    dgvInventory.Rows.Add(new[] { inventoryItem.Details.Name, inventoryItem.Quantity.ToString() });
-                }
-            }
+            UpdateInventoryListInUI();
 
             // Refresh player's quest list
             dgvQuests.RowHeadersVisible = false;
@@ -274,6 +263,26 @@ namespace MuddyMud
                 cboPotions.ValueMember = "ID";
 
                 cboPotions.SelectedIndex = 0;
+            }
+        }
+
+        private void UpdateInventoryListInUI()
+        {
+            dgvInventory.RowHeadersVisible = false;
+
+            dgvInventory.ColumnCount = 2;
+            dgvInventory.Columns[0].Name = "Name";
+            dgvInventory.Columns[0].Width = 197;
+            dgvInventory.Columns[1].Name = "Quantity";
+
+            dgvInventory.Rows.Clear();
+
+            foreach (InventoryItem inventoryItem in _player.Inventory)
+            {
+                if (inventoryItem.Quantity > 0)
+                {
+                    dgvInventory.Rows.Add(new[] { inventoryItem.Details.Name, inventoryItem.Quantity.ToString() });
+                }
             }
         }
 

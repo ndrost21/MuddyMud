@@ -285,6 +285,7 @@
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
+            this.KeyPreview = true;
             this.Name = "MuddyMud";
             this.Text = "MuddyMud";
             this.Load += new System.EventHandler(this.MuddyMud_Load);

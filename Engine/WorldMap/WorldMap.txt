@@ -1,0 +1,38 @@
+﻿{"locations":[
+	{
+		"ID":1,
+		"Name":"Entrance",
+		"Description":"Where the noobs start",
+		"LocationToNorth":2,
+		"LocationToEast":0,
+		"LocationToSouth":0,
+		"LocationToWest":3
+	},
+	{
+		"ID":2,
+		"Name":"Newhaven Mall",
+		"Description":"Where to buy some shit",
+		"LocationToNorth":0,
+		"LocationToEast":0,
+		"LocationToSouth":1,
+		"LocationToWest":0
+	},
+	{
+		"ID":3,
+		"Name":"Newhaven Street",
+		"Description":"Just a Street",
+		"LocationToNorth":0,
+		"LocationToEast":1,
+		"LocationToSouth":0,
+		"LocationToWest":4
+	},
+	{
+		"ID":4,
+		"Name":"Newhaven Arena",
+		"Description":"Where we gonna fight some guys",
+		"LocationToNorth":0,
+		"LocationToEast":3,
+		"LocationToSouth":0,
+		"LocationToWest":0
+	}]
+}

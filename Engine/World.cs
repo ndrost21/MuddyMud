@@ -3,6 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
+using System.Web;
+using Newtonsoft.Json;
+using System.IO;
+using Engine.WorldMap;
 
 namespace Engine
 {
@@ -12,6 +17,8 @@ namespace Engine
         public static readonly List<Monster> Monsters = new List<Monster>();
         public static readonly List<Quest> Quests = new List<Quest>();
         public static readonly List<Location> Locations = new List<Location>();
+
+        public const int LOCATION_ID_HOME = 1;
 
         public const int ITEM_ID_RUSTY_SWORD = 1;
         public const int ITEM_ID_RAT_TAIL = 2;
@@ -30,16 +37,6 @@ namespace Engine
 
         public const int QUEST_ID_CLEAR_ALCHEMIST_GARDEN = 1;
         public const int QUEST_ID_CLEAR_FARMERS_FIELD = 2;
-
-        public const int LOCATION_ID_HOME = 1;
-        public const int LOCATION_ID_TOWN_SQUARE = 2;
-        public const int LOCATION_ID_GUARD_POST = 3;
-        public const int LOCATION_ID_ALCHEMIST_HUT = 4;
-        public const int LOCATION_ID_ALCHEMISTS_GARDEN = 5;
-        public const int LOCATION_ID_FARMHOUSE = 6;
-        public const int LOCATION_ID_FARM_FIELD = 7;
-        public const int LOCATION_ID_BRIDGE = 8;
-        public const int LOCATION_ID_SPIDER_FIELD = 9;
 
         static World()
         {
@@ -111,67 +108,32 @@ namespace Engine
 
         private static void PopulateLocations()
         {
-            //TODO CHANGE THIS TO SOME SORTA JSON
-            // Create each location
-            Location home = new Location(LOCATION_ID_HOME, "Home", "Your house. You really need to clean up the place.");
+            WorldMapObject worldMapOject = new WorldMapObject();
 
-            Location townSquare = new Location(LOCATION_ID_TOWN_SQUARE, "Town square", "You see a fountain.");
+            string currentDirectory = Directory.GetCurrentDirectory();
+            string filePath = Path.Combine(currentDirectory, "WorldMap", "WorldMap.txt");
 
-            Location alchemistHut = new Location(LOCATION_ID_ALCHEMIST_HUT, "Alchemist's hut", "There are many strange plants on the shelves.");
-            alchemistHut.QuestAvailableHere = QuestByID(QUEST_ID_CLEAR_ALCHEMIST_GARDEN);
+            using (StreamReader r = new StreamReader(filePath))
+            {
+                string json = r.ReadToEnd();
+                worldMapOject = JsonConvert.DeserializeObject<WorldMapObject>(json);
+            }
 
-            Location alchemistsGarden = new Location(LOCATION_ID_ALCHEMISTS_GARDEN, "Alchemist's garden", "Many plants are growing here.");
-            alchemistsGarden.MonsterLivingHere = MonsterByID(MONSTER_ID_RAT);
+            //add locations
+            foreach (WorldMapLocation location in worldMapOject.locations)
+            {
+                Locations.Add(new Location(location.ID, location.Name, location.Description));
+            }
+            //link locations
+            foreach (Location location in Locations)
+            {
+                WorldMapLocation worldMap = worldMapOject.locations.Find(i => i.ID == location.ID);
 
-            Location farmhouse = new Location(LOCATION_ID_FARMHOUSE, "Farmhouse", "There is a small farmhouse, with a farmer in front.");
-            farmhouse.QuestAvailableHere = QuestByID(QUEST_ID_CLEAR_FARMERS_FIELD);
-
-            Location farmersField = new Location(LOCATION_ID_FARM_FIELD, "Farmer's field", "You see rows of vegetables growing here.");
-            farmersField.MonsterLivingHere = MonsterByID(MONSTER_ID_SNAKE);
-
-            Location guardPost = new Location(LOCATION_ID_GUARD_POST, "Guard post", "There is a large, tough-looking guard here.", ItemByID(ITEM_ID_ADVENTURER_PASS));
-
-            Location bridge = new Location(LOCATION_ID_BRIDGE, "Bridge", "A stone bridge crosses a wide river.");
-
-            Location spiderField = new Location(LOCATION_ID_SPIDER_FIELD, "Forest", "You see spider webs covering covering the trees in this forest.");
-            spiderField.MonsterLivingHere = MonsterByID(MONSTER_ID_GIANT_SPIDER);
-
-            // Link the locations together
-            home.LocationToNorth = townSquare;
-
-            townSquare.LocationToNorth = alchemistHut;
-            townSquare.LocationToSouth = home;
-            townSquare.LocationToEast = guardPost;
-            townSquare.LocationToWest = farmhouse;
-
-            farmhouse.LocationToEast = townSquare;
-            farmhouse.LocationToWest = farmersField;
-
-            farmersField.LocationToEast = farmhouse;
-
-            alchemistHut.LocationToSouth = townSquare;
-            alchemistHut.LocationToNorth = alchemistsGarden;
-
-            alchemistsGarden.LocationToSouth = alchemistHut;
-
-            guardPost.LocationToEast = bridge;
-            guardPost.LocationToWest = townSquare;
-
-            bridge.LocationToWest = guardPost;
-            bridge.LocationToEast = spiderField;
-
-            spiderField.LocationToWest = bridge;
-
-            // Add the locations to the static list
-            Locations.Add(home);
-            Locations.Add(townSquare);
-            Locations.Add(guardPost);
-            Locations.Add(alchemistHut);
-            Locations.Add(alchemistsGarden);
-            Locations.Add(farmhouse);
-            Locations.Add(farmersField);
-            Locations.Add(bridge);
-            Locations.Add(spiderField);
+                location.LocationToNorth = Locations.Find(i => i.ID == worldMap.LocationToNorth);
+                location.LocationToEast = Locations.Find(i => i.ID == worldMap.LocationToEast);
+                location.LocationToSouth = Locations.Find(i => i.ID == worldMap.LocationToSouth);
+                location.LocationToWest = Locations.Find(i => i.ID == worldMap.LocationToWest);
+            }
         }
 
         public static Item ItemByID(int id)
