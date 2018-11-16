@@ -19,6 +19,8 @@ namespace MuddyMud
         {
             InitializeComponent();
 
+            Location location = new Location(1, "Home", "This is your house.");
+
             _player = new Player
             {
                 CurrentHitPoints = 10,
