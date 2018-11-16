@@ -21,14 +21,7 @@ namespace MuddyMud
 
             Location location = new Location(1, "Home", "This is your house.");
 
-            _player = new Player
-            {
-                CurrentHitPoints = 10,
-                MaximumHitPoints = 10,
-                Gold = 0,
-                ExperiencePoints = 0,
-                Level = 1
-            };
+            _player = new Player(0, 0, 1, 10, 10);
 
             lblHitPoints.Text = _player.CurrentHitPoints.ToString();
             lblGold.Text = _player.Gold.ToString();
