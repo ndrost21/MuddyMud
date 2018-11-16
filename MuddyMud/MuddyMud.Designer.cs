@@ -1,6 +1,6 @@
 ﻿namespace MuddyMud
 {
-    partial class Form1
+    partial class MuddyMud
     {
         /// <summary>
         /// Required designer variable.
