@@ -16,5 +16,6 @@ namespace Engine
         public int LocationToEast { get; set; }
         public int LocationToSouth { get; set; }
         public int LocationToWest { get; set; }
+        public int MonsterLivingHere { get; set; }
     }
 }

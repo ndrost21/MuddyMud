@@ -33,6 +33,7 @@
 		"LocationToNorth":0,
 		"LocationToEast":3,
 		"LocationToSouth":0,
-		"LocationToWest":0
+		"LocationToWest":0,
+		"MonsterLivingHere":1
 	}]
 }

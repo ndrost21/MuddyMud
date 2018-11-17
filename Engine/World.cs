@@ -133,6 +133,7 @@ namespace Engine
                 location.LocationToEast = Locations.Find(i => i.ID == worldMap.LocationToEast);
                 location.LocationToSouth = Locations.Find(i => i.ID == worldMap.LocationToSouth);
                 location.LocationToWest = Locations.Find(i => i.ID == worldMap.LocationToWest);
+                location.MonsterLivingHere = Monsters.Find(i => i.ID == worldMap.MonsterLivingHere);
             }
         }
 
