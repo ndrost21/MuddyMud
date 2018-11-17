@@ -23,21 +23,18 @@ namespace MuddyMud
             Location location = new Location(1, "Home", "This is your house.");
 
             _player = new Player(0, 0, 1, 10, 10);
+            
+            lblHitPoints.DataBindings.Add("Text", _player, "CurrentHitPoints");
+            lblGold.DataBindings.Add("Text",_player, "Gold");
+            lblExperience.DataBindings.Add("Text", _player, "ExperiencePoints");
+            lblLevel.DataBindings.Add("Text", _player, "Level");
             MoveTo(World.LocationByID(World.LOCATION_ID_HOME), "home");
-            _player.Inventory.Add(new InventoryItem(World.ItemByID(World.ITEM_ID_RUSTY_SWORD), 1));
-
-            lblHitPoints.Text = _player.CurrentHitPoints.ToString();
-            lblGold.Text = _player.Gold.ToString();
-            lblExperience.Text = _player.ExperiencePoints.ToString();
-            lblLevel.Text = _player.Level.ToString();
         }
 
         private void MuddyMud_Load(object sender, EventArgs e)
         {
 
         }
-
-
 
         private void btnWest_Click(object sender, EventArgs e)
         {
@@ -89,7 +86,7 @@ namespace MuddyMud
 
             // Completely heal the player
             _player.CurrentHitPoints = _player.MaximumHitPoints;
-
+   
             // Update Hit Points in UI
             lblHitPoints.Text = _player.CurrentHitPoints.ToString();
 
