@@ -9,6 +9,6 @@ namespace Engine.WorldMap
 {
     public class WorldMapObject
     {
-        public List<WorldMapLocation> locations { get; set; }
+        public List<WorldMapLocation> Locations { get; set; }
     }
 }

@@ -120,14 +120,14 @@ namespace Engine
             }
 
             //add locations
-            foreach (WorldMapLocation location in worldMapOject.locations)
+            foreach (WorldMapLocation location in worldMapOject.Locations)
             {
                 Locations.Add(new Location(location.ID, location.Name, location.Description));
             }
             //link locations
             foreach (Location location in Locations)
             {
-                WorldMapLocation worldMap = worldMapOject.locations.Find(i => i.ID == location.ID);
+                WorldMapLocation worldMap = worldMapOject.Locations.Find(i => i.ID == location.ID);
 
                 location.LocationToNorth = Locations.Find(i => i.ID == worldMap.LocationToNorth);
                 location.LocationToEast = Locations.Find(i => i.ID == worldMap.LocationToEast);
